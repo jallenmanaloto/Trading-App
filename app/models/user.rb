@@ -3,5 +3,4 @@ class User < ApplicationRecord
         :recoverable, :rememberable, :validatable
     has_one :admin
     has_one :trader
-    accepts_nested_attributes_for :trader
 end
