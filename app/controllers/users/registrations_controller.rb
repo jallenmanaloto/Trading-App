@@ -19,7 +19,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirm)
+    params.require(:user).permit(:name, :email, :password)
   end
   # GET /resource/edit
   # def edit
