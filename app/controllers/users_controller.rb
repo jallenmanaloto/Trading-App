@@ -17,7 +17,12 @@ class UsersController < ApplicationController
         user = User.new(user_params)
         trader = Trader.new(
             name: user.name,
-            user_id: user.id
+            user_id: user.id,
+            status: false,
+            total_cash: 0,
+            total_stocks: 0,
+            profit: 0,
+            email: user.email
         )
 
         respond_to do |format|
