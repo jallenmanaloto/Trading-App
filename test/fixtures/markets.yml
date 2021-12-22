@@ -1,0 +1,35 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  symbol: MyString
+  exchange: MyString
+  exchangeSuffix: MyString
+  exchangeName: MyString
+  exchangeSegment: MyString
+  name: MyString
+  date: MyString
+  type: 
+  iexId: MyString
+  region: MyString
+  currency: MyString
+  isEnabled: MyString
+  figi: MyString
+  cik: MyString
+  lei: MyString
+
+two:
+  symbol: MyString
+  exchange: MyString
+  exchangeSuffix: MyString
+  exchangeName: MyString
+  exchangeSegment: MyString
+  name: MyString
+  date: MyString
+  type: 
+  iexId: MyString
+  region: MyString
+  currency: MyString
+  isEnabled: MyString
+  figi: MyString
+  cik: MyString
+  lei: MyString
