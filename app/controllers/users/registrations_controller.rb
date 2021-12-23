@@ -3,6 +3,8 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create] 
   # before_action :configure_account_update_params, only: [:update]
+  skip_before_action :verify_authenticity_token
+  respond_to :json
 
   # GET /resource/sign_up
   def new
@@ -19,7 +21,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
 
   def user_params
-    params.require(:user).permit(:name, :email, :password)
+    params.permit(:name, :email, :password)
   end
   # GET /resource/edit
   # def edit
