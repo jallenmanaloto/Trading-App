@@ -28,4 +28,8 @@ class Market < ApplicationRecord
     def news_company
         news = @@client.news(self.symbol)
     end
+
+    def chart
+        chart = @@client.chart(self.symbol)
+    end
 end
