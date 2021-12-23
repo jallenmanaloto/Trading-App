@@ -10,4 +10,10 @@ class MarketsController < ApplicationController
         }
     end
 
+    def search
+        # @market_stock = Market.where('LOWER(name) LIKE ?', "%#{params[:search].downcase}%") => returning the search params
+        @market_stock = Market.last
+        render json: { market_stock: @market_stock}
+    end
+
 end
