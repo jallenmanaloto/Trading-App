@@ -22,18 +22,16 @@ module Api
         
             def create
                 user = User.new(user_params)
-                # respond_to do |format|
-                    if user.save
-                        trader = Trader.create(
-                            :name => user.name, 
-                            :email => user.email, 
-                            :user_id => user.id, 
-                            :status => false
-                        )
-                    else
-                      format.json { render json: user.errors, status: :unprocessable_entity }
-                    end
-                # end
+                if user.save
+                    trader = Trader.create(
+                        :name => user.name, 
+                        :email => user.email, 
+                        :user_id => user.id, 
+                        :status => false
+                    )
+                else
+                    format.json { render json: user.errors, status: :unprocessable_entity }
+                end
             end
         
             private
