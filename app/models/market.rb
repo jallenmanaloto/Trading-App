@@ -9,12 +9,6 @@ class Market < ApplicationRecord
     def latest_price()
         quote = @@client.quote(self.symbol)
         quote.latest_price
-
-        # company = client.company(self.symbol)
-        # company.company_name
-
-        # logo = client.logo(self.symbol)
-        # logo.url
     end
 
     def company_info
