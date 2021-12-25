@@ -7,6 +7,7 @@ module Api
 
             def index
                 traders = Trader.all
+                render json: {trader: trader}
             end
         
             def show 
@@ -17,7 +18,7 @@ module Api
             def edit
                 trader = Trader.find(params[:id])
             end
-        
+
             def create
                 user = User.create(trader_params)
                 trader = Trader.create(:name => user.name, :email => resource.email, :user_id => resource.id, :status => false)
@@ -34,7 +35,9 @@ module Api
         
             def update
                 trader = Trader.find(params[:id])
-        
+                amount = params[:total_cash].to_i
+                trader.deposit_money(amount)
+                
                 if trader.update(trader_params)
                     # render json response
                     # should redirect page
@@ -44,11 +47,11 @@ module Api
                     format.json { render json: trader.errors, status: :unprocessable_entity }
                 end
             end
-        
+
             private
         
             def trader_params
-                params.require(:trader).permit(:name, :email)
+                params.permit(:name, :email)
             end
         end
     end
