@@ -32,6 +32,24 @@ module Api
                 #     format.json { render json: @user.errors, status: :unprocessable_entity }
                 # end
             end
+
+            def buy_stock
+                trader = Trader.find(params[:id])
+                buy_cash = params[:amount_bought].to_i
+                trader_cash = trader.total_cash
+                trader.buy_stock(buy_cash)
+                price =  127 # stock.latest_price
+                shares = (buy_cash/price).to_f
+
+                if buy_cash > trader_cash
+                    render json: {error: "Not enough funds!"}
+                else
+                    
+                    # create new stock under Trader
+                    trader.update(total_cash: trader.total_cash)
+                    render json: { amount_paid: buy_cash, shares: shares, total_cash: trader.total_cash }
+                end
+            end
         
             def update
                 trader = Trader.find(params[:id])

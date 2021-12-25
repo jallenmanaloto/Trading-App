@@ -12,8 +12,11 @@ class Trader < ApplicationRecord
 
     end
 
-    def buy_stock
+    def buy_stock(amount)
         # deduct money from current cash
+        # add quantity based from purchase
+        new_balance = self.total_cash - amount
+        self.total_cash = new_balance
     end
 
     def sell_stock
