@@ -1,5 +1,6 @@
 class Trader < ApplicationRecord
     has_many :stocks
+    has_many :histories
     belongs_to :user
     
     def deposit_money(amount)
