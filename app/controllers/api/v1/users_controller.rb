@@ -9,7 +9,8 @@ module Api
             end
             
             def index
-                user = User.all
+                trader = Trader.all
+                render json: {trader: trader}
             end
         
             def show
