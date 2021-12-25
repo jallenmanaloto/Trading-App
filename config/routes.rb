@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users do
         resources :traders do
+          patch :buy_stock, on: :member
           resources :stocks
         end
         resources :admins
