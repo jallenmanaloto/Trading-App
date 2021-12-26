@@ -7,9 +7,9 @@ class Trader < ApplicationRecord
         # cash in money which will be used to buy stocks
         # default for new trader = 0
         # current money + new deposits
-
-        new_balance = self.total_cash += amount
-        self.total_cash = new_balance
+        
+        new_balance = trader.total_cash += amount
+        trader.total_cash = new_balance
 
     end
 
@@ -18,6 +18,7 @@ class Trader < ApplicationRecord
         # add quantity based from purchase
         new_balance = self.total_cash - amount
         self.total_cash = new_balance
+        
     end
 
     def sell_stock
