@@ -15,7 +15,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def create
     super
     user = User.create(user_params)
-    trader = Trader.create(:name => user.name, :email => resource.email, :user_id => resource.id, :status => false)
+    if user.save
+      trader = Trader.create(:name => resource.name, :email => resource.email, :user_id => resource.id, :status => false)
+    end
   end
 
   private
