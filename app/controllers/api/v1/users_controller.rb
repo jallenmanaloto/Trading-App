@@ -28,7 +28,10 @@ module Api
                         :name => user.name, 
                         :email => user.email, 
                         :user_id => user.id, 
-                        :status => false
+                        :status => false,
+                        :total_cash => 0,
+                        :total_shares => 0,
+                        :total_stocks => 0
                     )
                 else
                     format.json { render json: user.errors, status: :unprocessable_entity }
