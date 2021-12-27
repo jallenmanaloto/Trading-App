@@ -22,6 +22,10 @@ class Stock < ApplicationRecord
         shares = (quantity/current_price).round(6)
     end
 
+    def company_logo(symbol)
+        logo = @@client.logo(symbol)
+    end
+
     def sell_stock(quantity)
         # deduct amount of quantity to be sold
         # calculate equity and add to trader's total_cash
