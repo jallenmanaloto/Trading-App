@@ -35,10 +35,11 @@ module Api
 
             def buy_stock
                 trader = Trader.find(params[:id])
+                stock_to_buy = Market.find_by(:symbol => params[:symbol])
                 buy_cash = params[:amount_bought].to_i
                 trader_cash = trader.total_cash
                 trader.buy_stock(buy_cash)
-                price =  127 # stock.latest_price
+                price =  stock_to_buy.latest_price
                 shares = (buy_cash/price).to_f
 
                 if buy_cash > trader_cash
@@ -46,9 +47,19 @@ module Api
                 else
                     
                     # create new stock under Trader
-                    trader.update(total_cash: trader.total_cash)
-                    render json: { amount_paid: buy_cash, shares: shares, total_cash: trader.total_cash }
+                    # trader.update(total_cash: trader.total_cash)
+                    # render json: { amount_paid: buy_cash, shares: shares, total_cash: trader.total_cash }
+                    render json: {stock: stock_to_buy}
                 end
+            end
+
+            def sell_stock
+                trader = Trader.find(params[:id])
+                buy_cash = params[:amount_sold].to_i
+                trader_cash = trader.total_cash
+
+                render json: { trader: trader}
+
             end
         
             def update
