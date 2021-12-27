@@ -9,7 +9,6 @@ module Api
                 stocks = trader.stocks.all
                                
                 render json: { stocks: stocks}
-
             end
 
             def stock_quantity
@@ -18,7 +17,7 @@ module Api
                 trader_sum_stock = stocks.group_by { |stock| stock[:symbol] }
                 .values
                 .map do |a| 
-                    {stock: a.first.name , total_shares: a.map(&:quantity).inject(0, &:+)}
+                    { stock: a.first.name , total_shares: a.map(&:quantity).inject(0, &:+) }
                 end
                                
                 render json: { stocks: trader_sum_stock}
@@ -29,8 +28,9 @@ module Api
 
             def create
                 stock = Stock.create(stock_params)
+                amount = params[:amount_bought].to_f
                 if stock.save
-                    stock.update(latest_price: stock.latest_price.to_f.round(2), change_percent: stock.change_percent.to_f.round(5))
+                    stock.update(latest_price: stock.latest_price.to_f.round(2), change_percent: stock.change_percent.to_f.round(5), quantity: stock.calculate_quantity(amount))
                     render json: { stock: stock }
                 else
                    render json: stock.errors
@@ -40,7 +40,7 @@ module Api
             private
 
             def stock_params
-                params.permit(:name, :symbol, :trader_id, :quantity)
+                params.permit(:name, :symbol, :trader_id)
             end
         end
     end

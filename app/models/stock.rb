@@ -16,4 +16,14 @@ class Stock < ApplicationRecord
         quote = @@client.quote(self.symbol)
         quote.change_percent
     end
+
+    def calculate_quantity(quantity)
+        current_price = self.latest_price
+        shares = (quantity/current_price).round(6)
+    end
+
+    def sell_stock(quantity)
+        # deduct amount of quantity to be sold
+        # calculate equity and add to trader's total_cash
+    end
 end
