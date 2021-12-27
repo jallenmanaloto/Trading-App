@@ -16,7 +16,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
     super
     user = User.create(user_params)
     if user.save
-      trader = Trader.create(:name => resource.name, :email => resource.email, :user_id => resource.id, :status => false)
+      trader = Trader.create(
+        :name => resource.name, 
+        :email => resource.email, 
+        :user_id => resource.id, 
+        :status => false,
+        :equity => 0.00,
+        :total_cash => 0.00
+        )
     end
   end
 
