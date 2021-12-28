@@ -18,8 +18,18 @@ class Stock < ApplicationRecord
     end
 
     def calculate_quantity(shares)
-        current_quantity = self.quantity
-        self.quantity = current_quantity + shares
+        if self.quantity == nil
+            self.quantity = 0
+            current_quantity = self.quantity
+            self.quantity = current_quantity + shares
+        else
+            current_quantity = self.quantity
+            self.quantity = current_quantity + shares
+        end
+    end
+
+    def cash_value
+       self.latest_price * self.quantity
     end
 
     def company_name
@@ -30,5 +40,10 @@ class Stock < ApplicationRecord
     def sell_stock(quantity)
         # deduct amount of quantity to be sold
         # calculate equity and add to trader's total_cash
+        # current_cash_value = self.quantity - cash_value
+        # self.quantity = current_cash_value
+        self.quantity - quantity
     end
+
+
 end
