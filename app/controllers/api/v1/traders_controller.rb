@@ -63,6 +63,8 @@ module Api
                         stock.update(quantity: stock.sell_stock(sell_amount))
 
                         if stock.quantity == 0 || stock.quantity < 0
+                            stock.destroy
+
                             render json: { msg: "Sold all owned shares for this stock!"}
                         else
                             render json: {trader: trader, stock: stock }
