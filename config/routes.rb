@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   get 'index', to: 'markets#index'
   get 'search', to: 'markets#search'
   get 'api/v1/users/:user_id/traders/:trader_id/stock_quantity', to: 'api/v1/stocks#stock_quantity'
-  # patch 'api/v1/users/:user_id/traders/:trader_id/sell_stock', to: 'api/v1/traders#sell_stock'
+  # get 'api/v1/users/:user_id/traders/:trader_id/sell_stock', to: 'api/v1/traders#sell_stock'
   devise_for :users, controllers: { registrations: 'users/registrations' }, views: { registrations: 'users/new' }
 
   namespace :api do
@@ -13,9 +13,13 @@ Rails.application.routes.draw do
       resources :users do
         resources :traders do
           patch :buy_stock, on: :member
-          patch :sell_stock, on: :member
+          get :sell_stock, on: :member
+          patch :deposit_money, on: :member
           resources :histories
-          resources :stocks
+          resources :stocks do
+            get :sell_stock, on: :member
+            post :buy_stock, on: :member
+          end
         end
         resources :admins
       end
