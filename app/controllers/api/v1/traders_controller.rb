@@ -19,11 +19,6 @@ module Api
                 trader = Trader.find(params[:id])
             end
 
-            def create
-                user = User.create(trader_params)
-                trader = Trader.create(:name => user.name, :email => resource.email, :user_id => resource.id, :status => false)
-            end
-
             def buy_stock
                 trader = Trader.find(params[:id])
                 stock_to_buy = Market.find_by(:symbol => params[:symbol])
@@ -38,14 +33,13 @@ module Api
                 else
                     stock = trader.stocks.find_or_create_by(symbol: stock_to_buy.symbol)
                     stock.update(
-                    symbol: stock.symbol, 
-                    latest_price: stock.latest_price, 
-                    change_percent: stock.change_percent, 
-                    name: stock.company_name, 
-                    company_logo: stock_to_buy.logo,
-                    quantity: stock.calculate_quantity(shares)
+                        symbol: stock.symbol, 
+                        latest_price: stock.latest_price, 
+                        change_percent: stock.change_percent, 
+                        name: stock.company_name, 
+                        company_logo: stock_to_buy.logo,
+                        quantity: stock.calculate_quantity(shares)
                     )
-                    
                     trader.update(total_cash: trader.total_cash)
                     render json: { amount_paid: buy_cash, trader: trader, stock: stock }
                 end
@@ -54,25 +48,36 @@ module Api
             def sell_stock
                 # Cannot sell more than the available shares/equity from stock
                 trader = Trader.find(params[:id])
-                stock = Stock.find(params[:id])
-                stock_equity = stock.latest_price * stock.quantity
-                buy_cash = params[:amount_sold]
+                stock = trader.stocks.find_by(symbol: params[:symbol])
+                sell_amount = params[:amount_sold].to_f
                 trader_cash = trader.total_cash
+                stock_quantity = stock.quantity
+                
+                case 
+                    when sell_amount > stock.cash_value
+                        render json: { error: "You cannot sell more than the shares you own." }
+                    when sell_amount == 0
+                        render json: { error: "Cannot sell 0 value." }
+                    else
+                        trader.update(total_cash: trader.sell_stock(sell_amount))
+                        stock.update(quantity: stock.sell_stock(sell_amount))
 
-                render json: { stock_equity: stock_equity, stock_quantity: stock.quantity }
+                        if stock.quantity == 0 || stock.quantity < 0
+                            render json: { msg: "Sold all owned shares for this stock!"}
+                        else
+                            render json: {trader: trader, stock: stock }
+                        end
+                end
             end
         
-            def deposit_money # change method name to deposit_money
+            def deposit_money
                 trader = Trader.find(params[:id])
                 amount = params[:total_cash]
                 total_cash = trader.deposit_money(amount)
                 
                 if trader.update(total_cash: total_cash)
-                    # render json response
-                    # should redirect page
                     render json: { trader: trader }
                 else
-                    # render json error message
                     render json: { errors: trader.errors }
                 end
             end
