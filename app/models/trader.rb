@@ -22,8 +22,7 @@ class Trader < ApplicationRecord
     def sell_stock(amount)
         # adds money to current cash
         # stock = Stock.find(params[:symbol])
-        stock_equity = ((0.04 * 27 ) + 27)
-        new_balance = self.total_cash + stock_equity
+        new_balance = self.total_cash += amount
         self.total_cash = new_balance
     end
 end
