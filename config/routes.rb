@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   root to: 'api/v1/users#index'
   get 'index', to: 'markets#index'
   get 'search', to: 'markets#search'
-  get 'api/v1/users/:user_id/traders/:trader_id/stock_quantity', to: 'api/v1/stocks#stock_quantity'
   # get 'api/v1/users/:user_id/traders/:trader_id/sell_stock', to: 'api/v1/traders#sell_stock'
   devise_for :users, controllers: { registrations: 'users/registrations' }, views: { registrations: 'users/new' }
 
