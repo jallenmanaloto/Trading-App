@@ -22,15 +22,6 @@ module Api
             def create
                 user = User.create(trader_params)
                 trader = Trader.create(:name => user.name, :email => resource.email, :user_id => resource.id, :status => false)
-                
-                # respond_to do |format|
-                # if trader.save
-                #     format.html { redirect_to @user, notice: "User was successfully created." }
-                #     format.json { render :show, status: :created, location: @user }
-                # else
-                #     format.html { render :new, status: :unprocessable_entity }
-                #     format.json { render json: @user.errors, status: :unprocessable_entity }
-                # end
             end
 
             def buy_stock
@@ -45,35 +36,44 @@ module Api
                 if buy_cash > trader_cash
                     render json: {error: "Not enough funds!"}
                 else
+                    stock = trader.stocks.find_or_create_by(symbol: stock_to_buy.symbol)
+                    stock.update(
+                    symbol: stock.symbol, 
+                    latest_price: stock.latest_price, 
+                    change_percent: stock.change_percent, 
+                    name: stock.company_name, 
+                    company_logo: stock_to_buy.logo,
+                    quantity: stock.calculate_quantity(shares)
+                    )
                     
-                    # create new stock under Trader
-                    # trader.update(total_cash: trader.total_cash)
-                    # render json: { amount_paid: buy_cash, shares: shares, total_cash: trader.total_cash }
-                    render json: {stock: stock_to_buy}
+                    trader.update(total_cash: trader.total_cash)
+                    render json: { amount_paid: buy_cash, trader: trader, stock: stock }
                 end
             end
 
             def sell_stock
+                # Cannot sell more than the available shares/equity from stock
                 trader = Trader.find(params[:id])
-                buy_cash = params[:amount_sold].to_i
+                stock = Stock.find(params[:id])
+                stock_equity = stock.latest_price * stock.quantity
+                buy_cash = params[:amount_sold]
                 trader_cash = trader.total_cash
 
-                render json: { trader: trader}
-
+                render json: { stock_equity: stock_equity, stock_quantity: stock.quantity }
             end
         
-            def update
+            def deposit_money # change method name to deposit_money
                 trader = Trader.find(params[:id])
-                amount = params[:total_cash].to_i
-                trader.deposit_money(amount)
+                amount = params[:total_cash]
+                total_cash = trader.deposit_money(amount)
                 
-                if trader.update(trader_params)
+                if trader.update(total_cash: total_cash)
                     # render json response
                     # should redirect page
                     render json: { trader: trader }
                 else
                     # render json error message
-                    format.json { render json: trader.errors, status: :unprocessable_entity }
+                    render json: { errors: trader.errors }
                 end
             end
 

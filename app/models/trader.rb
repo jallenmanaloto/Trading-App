@@ -7,9 +7,8 @@ class Trader < ApplicationRecord
         # cash in money which will be used to buy stocks
         # default for new trader = 0
         # current money + new deposits
-        
-        new_balance = trader.total_cash += amount
-        trader.total_cash = new_balance
+        new_balance = self.total_cash += amount.to_i
+        self.total_cash = new_balance
 
     end
 
@@ -18,10 +17,13 @@ class Trader < ApplicationRecord
         # add quantity based from purchase
         new_balance = self.total_cash - amount
         self.total_cash = new_balance
-        
     end
 
-    def sell_stock
+    def sell_stock(amount)
         # adds money to current cash
+        # stock = Stock.find(params[:symbol])
+        stock_equity = ((0.04 * 27 ) + 27)
+        new_balance = self.total_cash + stock_equity
+        self.total_cash = new_balance
     end
 end
