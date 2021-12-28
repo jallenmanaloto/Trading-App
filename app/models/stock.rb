@@ -17,13 +17,14 @@ class Stock < ApplicationRecord
         quote.change_percent
     end
 
-    def calculate_quantity(quantity)
-        current_price = self.latest_price
-        shares = (quantity/current_price).round(6)
+    def calculate_quantity(shares)
+        current_quantity = self.quantity
+        self.quantity = current_quantity + shares
     end
 
-    def company_logo(symbol)
-        logo = @@client.logo(symbol)
+    def company_name
+        company = @@client.company(self.symbol)
+        company.company_name
     end
 
     def sell_stock(quantity)
