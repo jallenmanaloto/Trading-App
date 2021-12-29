@@ -1,7 +1,7 @@
 module Api
     module V1
         class TradersController < ApplicationController
-
+            before_action :authenticate_user!, except: [:index, :create, :show, :edit] #:buy_stock, :sell_stock, :deposit_money]
             skip_before_action :verify_authenticity_token
             respond_to :json
 
