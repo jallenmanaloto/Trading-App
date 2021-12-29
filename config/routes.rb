@@ -20,7 +20,7 @@ Rails.application.routes.draw do
             post :buy_stock, on: :member
           end
         end
-        resources :admins
+        resources :admins do
       end
     end
   end
