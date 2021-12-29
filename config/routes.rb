@@ -21,6 +21,8 @@ Rails.application.routes.draw do
           end
         end
         resources :admins do
+          patch :approve_account, on: :member
+        end
       end
     end
   end
