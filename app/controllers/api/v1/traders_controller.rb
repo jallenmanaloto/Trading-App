@@ -1,7 +1,7 @@
 module Api
     module V1
         class TradersController < ApplicationController
-            before_action :authenticate_user!, except: [:index, :create, :show, :edit] #:buy_stock, :sell_stock, :deposit_money]
+            before_action :authenticate_user!, except: [:index, :create, :show, :edit, :buy_stock, :sell_stock, :deposit_money]
             skip_before_action :verify_authenticity_token
             respond_to :json
 
@@ -41,6 +41,13 @@ module Api
                         quantity: stock.calculate_quantity(shares)
                     )
                     trader.update(total_cash: trader.total_cash)
+                    history = trader.histories.create(
+                        :transaction_name => "buy",
+                        :stock_name => stock.company_name,
+                        :symbol => stock.symbol,
+                        :quantity => amount_bought,
+                        :price => stock.latest_price
+                    )
                     render json: { amount_paid: buy_cash, trader: trader, stock: stock }
                 end
             end
@@ -61,6 +68,13 @@ module Api
                     else
                         trader.update(total_cash: trader.sell_stock(sell_amount))
                         stock.update(quantity: stock.sell_stock(sell_amount))
+                        history = trader.histories.create(
+                            :transaction_name => "sell",
+                            :stock_name => stock.company_name,
+                            :symbol => stock.symbol,
+                            :quantity => sell_amount,
+                            :price => stock.latest_price
+                        )
 
                         if stock.quantity == 0 || stock.quantity < 0
                             stock.destroy
