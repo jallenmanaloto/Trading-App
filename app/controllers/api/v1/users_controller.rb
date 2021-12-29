@@ -1,7 +1,7 @@
 module Api
     module V1
         class UsersController < ApplicationController
-            before_action :authenticate_user!, except: [:create, :show, :edit]
+            before_action :authenticate_user!, except: [:index, :create, :show, :edit]
             skip_before_action :verify_authenticity_token
             respond_to :json
 
