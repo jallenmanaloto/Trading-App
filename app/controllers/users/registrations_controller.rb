@@ -14,8 +14,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     super
-    user = User.create(user_params)
+    user = User.new(user_params)
     if user.save
+      UserMailer.approve_account.deliver_later
       trader = Trader.create(
         :name => resource.name, 
         :email => resource.email, 
@@ -25,6 +26,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
         :total_cash => 0.00
         )
     end
+    
   end
 
   private
