@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_27_113159) do
+ActiveRecord::Schema.define(version: 2021_12_29_062308) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,7 +26,7 @@ ActiveRecord::Schema.define(version: 2021_12_27_113159) do
   end
 
   create_table "histories", force: :cascade do |t|
-    t.string "transaction"
+    t.string "transaction_name"
     t.string "stock_name"
     t.string "symbol"
     t.string "quantity"
