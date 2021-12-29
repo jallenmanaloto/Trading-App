@@ -3,4 +3,14 @@ class User < ApplicationRecord
         :recoverable, :rememberable, :validatable, :confirmable
     has_one :admin
     has_one :trader
+    before_create :skipping_confirm
+    after_create :send_pending
+
+    def skipping_confirm
+        self.skip_confirmation!
+    end
+
+    def send_pending
+        UserMailer.approve_account(self).deliver_later
+    end
 end
