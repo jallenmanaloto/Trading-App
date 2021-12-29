@@ -12,7 +12,7 @@ Rails.application.routes.draw do
       resources :users do
         resources :traders do
           patch :buy_stock, on: :member
-          get :sell_stock, on: :member
+          patch :sell_stock, on: :member
           patch :deposit_money, on: :member
           resources :histories
           resources :stocks do
