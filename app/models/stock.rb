@@ -1,4 +1,7 @@
 class Stock < ApplicationRecord
+    validates_presence_of :name, :latest_price, :change_percent, :symbol, :company_logo, :quantity
+    # validates :name, presence: true
+    # validates :latest_price, presence: true
     belongs_to :trader
 
     @@client = IEX::Api::Client.new(
@@ -44,6 +47,4 @@ class Stock < ApplicationRecord
         # self.quantity = current_cash_value
         self.quantity - quantity
     end
-
-
 end
