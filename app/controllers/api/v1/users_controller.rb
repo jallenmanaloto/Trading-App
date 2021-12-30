@@ -1,7 +1,7 @@
 module Api
     module V1
         class UsersController < ApplicationController
-            before_action :authenticate_user!, except: [:index, :create, :show, :edit]
+            before_action :authenticate_user!, except: [:create, :show, :edit]
             skip_before_action :verify_authenticity_token
             respond_to :json
 
@@ -9,8 +9,8 @@ module Api
             end
             
             def index
-                trader = Trader.all
-                render json: {trader: trader}
+                # trader = Trader.all
+                # render json: { trader: trader }
             end
         
             def show
