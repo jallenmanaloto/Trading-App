@@ -1,4 +1,5 @@
 class Trader < ApplicationRecord
+    validates_presence_of :name, :email
     has_many :stocks
     has_many :histories
     belongs_to :user
