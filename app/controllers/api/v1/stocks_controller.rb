@@ -5,10 +5,11 @@ module Api
             respond_to :json
 
             def index
-                trader = Trader.find(params[:trader_id])
+                user = User.find(params[:id])
+                trader = user.trader
                 stocks = trader.stocks.all
                                
-                render json: { stocks: stocks}
+                render json: { stocks: trader}
             end
 
             private
