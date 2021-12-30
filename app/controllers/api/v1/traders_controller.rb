@@ -1,13 +1,13 @@
 module Api
     module V1
         class TradersController < ApplicationController
-            before_action :authenticate_user!, except: [:index, :create, :show, :edit, :buy_stock, :sell_stock, :deposit_money]
+            before_action :authenticate_user!, except: [:index, :create, :show, :edit, :buy_stock, :sell_stock, :deposit_money, :all_stocks]
             skip_before_action :verify_authenticity_token
             respond_to :json
 
             def index
                 traders = Trader.all
-                render json: {trader: trader}
+                render json: {trader: traders}
             end
         
             def show 
@@ -54,6 +54,7 @@ module Api
 
             def sell_stock
                 # Cannot sell more than the available shares/equity from stock
+                user = User.find(params[:user_id])
                 trader = Trader.find(params[:id])
                 stock = trader.stocks.find_by(symbol: params[:symbol])
                 sell_amount = params[:amount_sold].to_f
@@ -96,6 +97,13 @@ module Api
                 else
                     render json: { errors: trader.errors }
                 end
+            end
+
+            def all_stocks
+                trader = Trader.find(params[:id])
+                stocks = trader.stocks.all
+
+                render json: {stocks: stocks, trader: trader}
             end
 
             private
